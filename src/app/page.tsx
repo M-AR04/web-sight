@@ -6,20 +6,19 @@ import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import ProjectsExplorer from '@/components/ProjectsExplorer';
 import TechStackGrid from '@/components/TechStackGrid';
-import ProjectBuilder from '@/components/ProjectBuilder/ProjectBuilder';
+import PricingSection from '@/components/PricingSection';
 import Footer from '@/components/Footer';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Lock scroll while preloader is active
     if (loading) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -27,19 +26,15 @@ export default function Home() {
 
   return (
     <>
-      {/* 
-        The Preloader component manages its own 3 second timer.
-        We pass an onComplete callback to unlock scrolling.
-      */}
       <Preloader onComplete={() => setLoading(false)} />
 
       <Navbar />
-      
-      <main className="flex-1 w-full bg-[#050B15]">
+
+      <main className="flex-1 w-full" style={{ background: 'var(--bg-primary)' }}>
         <HeroSection />
         <ProjectsExplorer />
         <TechStackGrid />
-        <ProjectBuilder />
+        <PricingSection />
       </main>
 
       <Footer />

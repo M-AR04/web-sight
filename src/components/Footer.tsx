@@ -3,21 +3,23 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Mail, MessageCircle, Code, Briefcase } from "lucide-react";
+import { Mail, MessageCircle, Globe, Link2 } from "lucide-react";
+import { useSiteStore } from "@/store/siteStore";
 
 const quickLinks = [
   { label: "Home", href: "#home" },
-  { label: "Projects", href: "#projects" },
+  { label: "Our Work", href: "#projects" },
   { label: "Tech Stack", href: "#tech-stack" },
-  { label: "Build Your Project", href: "#project-builder" },
+  { label: "Pricing", href: "#pricing" },
 ];
 
 const services = [
-  "E-Commerce Development",
-  "Custom Web Applications",
-  "Mobile App Development",
-  "AI Integration",
-  "Security & DevOps",
+  "Landing Pages",
+  "Full Websites",
+  "Online Stores",
+  "Mobile Apps (Flutter)",
+  "AI Integrations",
+  "Custom Web Apps",
 ];
 
 const containerVariants = {
@@ -49,10 +51,19 @@ const handleSmoothScroll = (
   }
 };
 
-import { useSiteStore } from "@/store/siteStore";
-
 export default function Footer() {
-  const { agencyName, aboutText, contactPhone, contactEmail, socialGithub, socialLinkedin } = useSiteStore();
+  const {
+    agencyName,
+    aboutText,
+    contactPhone,
+    contactEmail,
+    socialInstagram,
+    socialLinkedin,
+    theme,
+  } = useSiteStore();
+
+  const isLight = theme === "light";
+  const whatsappUrl = `https://wa.me/${contactPhone.replace(/[^0-9]/g, "")}`;
 
   const connectLinks = [
     {
@@ -61,24 +72,62 @@ export default function Footer() {
       icon: Mail,
     },
     {
-      label: contactPhone,
-      href: `https://wa.me/${contactPhone.replace(/[^0-9]/g, '')}`,
-      icon: MessageCircle,
+      label: socialInstagram.replace(/^https?:\/\//, ""),
+      href: socialInstagram,
+      icon: Globe,
     },
     {
-      label: socialGithub.replace(/^https?:\/\//, ''),
-      href: socialGithub,
-      icon: Code,
-    },
-    {
-      label: socialLinkedin.replace(/^https?:\/\//, ''),
+      label: socialLinkedin.replace(/^https?:\/\//, ""),
       href: socialLinkedin,
-      icon: Briefcase,
+      icon: Link2,
     },
   ];
 
   return (
-    <footer className="bg-[#030A14] border-t border-[#00D4FF]/10">
+    <footer
+      style={{
+        background: "var(--footer-bg)",
+        borderTop: "1px solid var(--border-color)",
+      }}
+    >
+      {/* WhatsApp CTA Banner */}
+      <div
+        className="py-10 px-6"
+        style={{ background: "var(--accent-dim)", borderBottom: "1px solid var(--border-color)" }}
+      >
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div>
+            <h3
+              className="text-xl font-bold mb-1"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Ready to start your project?
+            </h3>
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
+              Contact us on WhatsApp and get a free consultation today.
+            </p>
+          </div>
+          <motion.a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            id="footer-whatsapp-btn"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="flex items-center gap-3 px-7 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 shrink-0"
+            style={{
+              background: "#25D366",
+              color: "#fff",
+              boxShadow: "0 0 24px rgba(37, 211, 102, 0.3)",
+            }}
+          >
+            <MessageCircle size={20} />
+            Chat on WhatsApp
+          </motion.a>
+        </div>
+      </div>
+
+      {/* Main Footer Content */}
       <motion.div
         className="max-w-7xl mx-auto px-6 py-16"
         variants={containerVariants}
@@ -97,34 +146,49 @@ export default function Footer() {
                 height={32}
                 className="rounded"
               />
-              <span className="text-xl tracking-wide">
-                <span className="font-bold text-white">{agencyName.split(' ')[0]}</span>
-                <span className="font-bold text-[#00D4FF]">{agencyName.split(' ').slice(1).join(' ')}</span>
+              <span className="text-xl font-black tracking-wide">
+                <span style={{ color: "var(--text-primary)" }}>Co</span>
+                <span style={{ color: "var(--accent)" }}>dev</span>
               </span>
             </div>
 
-            <p className="text-sm font-medium text-[#E0F7FA] mb-2">
-              Professional &amp; Interactive Web Solutions
+            <p
+              className="text-sm font-medium mb-2"
+              style={{ color: "var(--text-primary)" }}
+            >
+              Professional & Interactive Web Solutions
             </p>
 
-            <p className="text-sm leading-relaxed text-[#7B8CA3]">
+            <p
+              className="text-sm leading-relaxed"
+              style={{ color: "var(--text-secondary)" }}
+            >
               {aboutText}
             </p>
           </motion.div>
 
           {/* Column 2 – Quick Links */}
           <motion.div variants={columnVariants}>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#E0F7FA] mb-5">
+            <h4
+              className="text-sm font-semibold uppercase tracking-wider mb-5"
+              style={{ color: "var(--text-primary)" }}
+            >
               Quick Links
             </h4>
-
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
                   <a
                     href={link.href}
                     onClick={(e) => handleSmoothScroll(e, link.href)}
-                    className="text-sm text-[#7B8CA3] transition-colors duration-200 hover:text-[#00D4FF]"
+                    className="text-sm transition-colors duration-200"
+                    style={{ color: "var(--text-secondary)" }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = "var(--accent)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = "var(--text-secondary)")
+                    }
                   >
                     {link.label}
                   </a>
@@ -135,15 +199,18 @@ export default function Footer() {
 
           {/* Column 3 – Services */}
           <motion.div variants={columnVariants}>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#E0F7FA] mb-5">
+            <h4
+              className="text-sm font-semibold uppercase tracking-wider mb-5"
+              style={{ color: "var(--text-primary)" }}
+            >
               Services
             </h4>
-
             <ul className="space-y-3">
               {services.map((service) => (
                 <li
                   key={service}
-                  className="text-sm text-[#7B8CA3] transition-colors duration-200 hover:text-[#00D4FF] cursor-default"
+                  className="text-sm transition-colors duration-200 cursor-default"
+                  style={{ color: "var(--text-secondary)" }}
                 >
                   {service}
                 </li>
@@ -153,9 +220,24 @@ export default function Footer() {
 
           {/* Column 4 – Connect */}
           <motion.div variants={columnVariants}>
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#E0F7FA] mb-5">
+            <h4
+              className="text-sm font-semibold uppercase tracking-wider mb-5"
+              style={{ color: "var(--text-primary)" }}
+            >
               Connect
             </h4>
+
+            {/* WhatsApp big link */}
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-semibold mb-4 transition-all duration-200 group"
+              style={{ color: "#25D366" }}
+            >
+              <MessageCircle size={16} className="shrink-0 group-hover:scale-110 transition-transform" />
+              <span>{contactPhone}</span>
+            </a>
 
             <ul className="space-y-3">
               {connectLinks.map(({ label, href, icon: Icon }) => (
@@ -164,10 +246,17 @@ export default function Footer() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm text-[#7B8CA3] transition-colors duration-200 hover:text-[#00D4FF]"
+                    className="inline-flex items-center gap-2 text-sm transition-colors duration-200"
+                    style={{ color: "var(--text-secondary)" }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.color = "var(--accent)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.color = "var(--text-secondary)")
+                    }
                   >
                     <Icon size={16} className="shrink-0" />
-                    <span>{label}</span>
+                    <span className="truncate max-w-[160px]">{label}</span>
                   </a>
                 </li>
               ))}
@@ -177,13 +266,13 @@ export default function Footer() {
       </motion.div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-[#00D4FF]/10">
+      <div style={{ borderTop: "1px solid var(--border-color)" }}>
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-[#7B8CA3]">
+          <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
             &copy; 2026 {agencyName}. All rights reserved.
           </p>
-          <p className="text-xs text-[#7B8CA3]">
-            طُور بكل فخر💙 🇯🇴
+          <p className="text-xs" style={{ color: "var(--text-secondary)" }}>
+            طُور بكل فخر 💙 🇯🇴
           </p>
         </div>
       </div>

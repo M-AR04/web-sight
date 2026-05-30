@@ -127,7 +127,11 @@ function TechCard({ item, color }: { item: TechItem; color: string }) {
         boxShadow: `0 0 20px ${color}33, 0 0 40px ${color}1a`,
         transition: { duration: 0.25 },
       }}
-      className="flex flex-col items-center gap-3 rounded-xl border border-[#00D4FF]/10 bg-[#0D1B2A] p-5 transition-colors"
+      className="flex flex-col items-center gap-3 rounded-xl p-5 transition-colors"
+      style={{
+        background: "var(--bg-card)",
+        border: "1px solid var(--border-color)",
+      }}
     >
       {/* Styled abbreviation circle */}
       <div
@@ -141,10 +145,11 @@ function TechCard({ item, color }: { item: TechItem; color: string }) {
         {item.abbr}
       </div>
 
-      <span className="text-sm font-medium text-[#E0F7FA]">{item.name}</span>
+      <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>{item.name}</span>
     </motion.div>
   );
 }
+
 
 function CategoryColumn({ category }: { category: TechCategory }) {
   return (
@@ -187,7 +192,8 @@ export default function TechStackGrid() {
   return (
     <section
       id="tech-stack"
-      className="relative overflow-hidden bg-[#050B15] py-24 sm:py-32"
+      className="relative overflow-hidden py-24 sm:py-32"
+      style={{ background: "var(--bg-secondary)" }}
     >
       {/* Subtle radial background glow */}
       <div className="pointer-events-none absolute inset-0">
